@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useState, type ReactNode } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState, type ReactNode, type CSSProperties } from "react";
 import { AnimatePresence, motion, useScroll, useTransform, type Variants } from "framer-motion";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -11,8 +11,9 @@ import pin from "@/assets/pin.png.asset.json";
 import emblem from "@/assets/emblem.png.asset.json";
 import pathImg from "@/assets/garden-path.webp.asset.json";
 import leavesImg from "@/assets/garden-leaves.webp.asset.json";
+import flowerCluster from "@/assets/flower-cluster.webp.asset.json";
 import { ButterflyFlock } from "./Butterfly";
-import { BotanicalSpray, FiligreeDivider, Finial, VineCorner } from "./Ornaments";
+import { FiligreeDivider, Finial, VineCorner } from "./Ornaments";
 import { WEDDING } from "@/lib/wedding";
 import { AR_RUM_21 } from "@/lib/verse";
 import { sendWish, wishesQuery, type Wish } from "@/lib/wishes";
@@ -56,11 +57,24 @@ const FLIP = { tl: "", tr: "-scale-x-100", bl: "-scale-y-100", br: "rotate-180" 
  * ornament stays flush in its corner; only the inner vine sways from its anchored corner.
  */
 function FloralCorner({ pos, className = "", delay = 0 }: { pos: keyof typeof FLIP; className?: string; delay?: number }) {
+  // bottom corners carry the stacked rose & tulip cluster; top corners keep the fine modern line accent
+  if (pos === "bl" || pos === "br") {
+    return (
+      <div aria-hidden className={`pointer-events-none absolute ${pos === "br" ? "-scale-x-100" : ""} ${className}`}>
+        <img src={flowerCluster.url} alt="" loading="lazy" width={700} height={700} className="vine-sway block w-full drop-shadow-[0_8px_16px_oklch(0.15_0.03_250/0.35)]" style={{ animationDelay: `${delay}s`, transformOrigin: "0% 100%" }} />
+      </div>
+    );
+  }
   return (
     <div aria-hidden className={`pointer-events-none absolute ${FLIP[pos]} ${className}`}>
       <VineCorner className="vine-sway block w-full" style={{ animationDelay: `${delay}s` }} />
     </div>
   );
+}
+
+/** Stacked roses & tulips rising from a bottom corner (mirror with --orn-flip / -scale-x-100). */
+function FlowerCluster({ className = "", style }: { className?: string; style?: CSSProperties }) {
+  return <img src={flowerCluster.url} alt="" aria-hidden width={700} height={700} className={`drop-shadow-[0_8px_16px_oklch(0.15_0.03_250/0.35)] ${className}`} style={style} />;
 }
 
 /** A full-width panel; `scene` lays a translucent garden photo over the tone so not every panel is plain. */
@@ -76,7 +90,7 @@ function Band({ children, tone = "navy", className = "", corners = true, seed = 
       {corners && (
         <>
           <FloralCorner pos="tl" className="left-1.5 top-1.5 w-16 opacity-85 sm:w-24" />
-          <FloralCorner pos="br" className="bottom-1.5 right-1.5 w-16 opacity-85 sm:w-24" delay={-3} />
+          <FloralCorner pos="br" className="-bottom-1 -right-1 w-28 sm:w-40" delay={-3} />
         </>
       )}
       <div className={`relative mx-auto max-w-md px-5 py-16 text-center sm:max-w-2xl sm:py-24 ${className}`}>
@@ -110,7 +124,7 @@ function Hero({ guest }: { guest: string }) {
       {/* damask-like texture from the garden photo, kept very faint */}
       <motion.img src={pathImg.url} alt="" className="absolute inset-0 h-full w-full object-cover mix-blend-soft-light"
         initial={{ opacity: 0 }} animate={{ opacity: 0.35 }} transition={{ duration: 2, ease: "easeOut" }} />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,oklch(0.269_0.096_13.5/0.85))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,oklch(0.37_0.075_12/0.75))]" />
       <Suspense fallback={null}>
         <GoldDust3D className="absolute inset-0" />
       </Suspense>
@@ -121,8 +135,8 @@ function Hero({ guest }: { guest: string }) {
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[78%] w-[82%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-t-full border border-royal-gold/35" />
       <FloralCorner pos="tl" className="left-2 top-2 w-24 opacity-90 sm:left-4 sm:top-4 sm:w-36" />
       <FloralCorner pos="tr" className="right-2 top-2 w-24 opacity-90 sm:right-4 sm:top-4 sm:w-36" delay={-3.5} />
-      <BotanicalSpray className="sway pointer-events-none absolute -bottom-2 -left-4 w-40 opacity-90 sm:w-64" />
-      <BotanicalSpray className="sway pointer-events-none absolute -bottom-2 -right-4 w-40 opacity-90 sm:w-64" style={{ ["--orn-flip" as string]: "scaleX(-1)" }} />
+      <FlowerCluster className="sway pointer-events-none absolute -bottom-2 -left-4 w-40 sm:w-64" />
+      <FlowerCluster className="pointer-events-none absolute -bottom-2 -right-4 w-40 -scale-x-100 sm:w-64" />
 
       <ButterflyFlock />
 
@@ -216,8 +230,8 @@ function Couple() {
       <GardenScene src={leavesImg.url} opacity={0.26} />
       <PetalRain count={6} seed={5} />
       <Twinkles count={8} seed={5} />
-      <FloralCorner pos="bl" className="bottom-1.5 left-1.5 w-16 opacity-85 sm:w-24" />
-      <FloralCorner pos="br" className="bottom-1.5 right-1.5 w-16 opacity-85 sm:w-24" delay={-3} />
+      <FloralCorner pos="bl" className="-bottom-1 -left-1 w-28 sm:w-40" />
+      <FloralCorner pos="br" className="-bottom-1 -right-1 w-28 sm:w-40" delay={-3} />
       <div className="relative mx-auto max-w-md px-4 py-16 text-center sm:max-w-3xl sm:py-24">
         <motion.div {...reveal}>
           <p className="font-caps text-[10px] uppercase tracking-[0.38em] text-royal-gold-light/75 sm:text-xs">Bismillahirrahmanirrahim</p>
@@ -442,8 +456,8 @@ export function Main({ guest }: { guest: string }) {
         <PetalRain count={9} seed={11} />
         <Twinkles count={10} seed={11} />
         <ButterflyFlock count={3} />
-        <BotanicalSpray className="sway pointer-events-none absolute -bottom-2 -left-6 w-44 opacity-80 sm:w-64" />
-        <BotanicalSpray className="sway pointer-events-none absolute -bottom-2 -right-6 w-44 opacity-80 sm:w-64" style={{ ["--orn-flip" as string]: "scaleX(-1)" }} />
+        <FlowerCluster className="sway pointer-events-none absolute -bottom-2 -left-6 w-44 sm:w-64" />
+        <FlowerCluster className="pointer-events-none absolute -bottom-2 -right-6 w-44 -scale-x-100 sm:w-64" />
         <motion.div {...reveal} className="relative mx-auto max-w-md">
           <div className="mx-auto w-36 rounded-t-full border border-royal-gold/60 bg-royal-navy px-4 pb-5 pt-8 shadow-[0_16px_36px_-16px_oklch(0.1_0.03_260/0.9)]">
             <img src={emblem.url} alt="S&L" className="floaty mx-auto h-24" />

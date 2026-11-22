@@ -97,23 +97,23 @@
   --wild-navy: oklch(0.239 0.058 256.7);
   --wild-burgundy: oklch(0.38 0.152 18.6);
   /* main page ("halaman inti") palette, taken from the reference: #6E0D25 · #0F1E36 · #D4AF37 */
-  --royal-wine: oklch(0.351 0.129 14.4);
-  --royal-wine-deep: oklch(0.269 0.096 13.5);
-  --royal-navy: oklch(0.236 0.051 259.4);
-  --royal-navy-soft: oklch(0.295 0.066 259.9);
+  --royal-wine: oklch(0.45 0.085 12);
+  --royal-wine-deep: oklch(0.37 0.075 12);
+  --royal-navy: oklch(0.33 0.045 256);
+  --royal-navy-soft: oklch(0.41 0.05 254);
   --royal-gold: oklch(0.767 0.139 91.1);
   --royal-gold-light: oklch(0.879 0.116 91.6);
   --royal-gold-deep: oklch(0.631 0.119 87.4);
-  /* dusty mauve: the non-red, non-blue tone used for the Ar-Rum verse and garden panels */
-  --royal-sage: oklch(0.34 0.06 350);
-  --royal-sage-deep: oklch(0.235 0.045 348);
-  --royal-sage-soft: oklch(0.45 0.07 352);
+  /* soft steel blue: the non-red, non-blue tone used for the Ar-Rum verse and garden panels */
+  --royal-sage: oklch(0.43 0.06 238);
+  --royal-sage-deep: oklch(0.34 0.05 242);
+  --royal-sage-soft: oklch(0.52 0.06 234);
   --gradient-royal-garden: radial-gradient(ellipse at 50% 26%, var(--royal-sage-soft), var(--royal-sage) 46%, var(--royal-sage-deep));
   --shadow-ornament: drop-shadow(0 1px 1.2px oklch(0.12 0.04 260 / 0.6));
   --gradient-royal-gold: linear-gradient(180deg, oklch(0.9 0.11 92), var(--royal-gold) 50%, oklch(0.631 0.119 87.4));
   --gradient-royal-gold-text: linear-gradient(120deg, oklch(0.7 0.13 86), oklch(0.93 0.09 94), oklch(0.74 0.14 89));
-  --gradient-royal-wine: radial-gradient(ellipse at 50% 28%, oklch(0.413 0.151 14.8), var(--royal-wine) 48%, var(--royal-wine-deep));
-  --gradient-royal-navy: radial-gradient(ellipse at 50% 0%, var(--royal-navy-soft), var(--royal-navy) 58%, oklch(0.196 0.04 259.8));
+  --gradient-royal-wine: radial-gradient(ellipse at 50% 28%, oklch(0.52 0.09 13), var(--royal-wine) 48%, var(--royal-wine-deep));
+  --gradient-royal-navy: radial-gradient(ellipse at 50% 0%, var(--royal-navy-soft), var(--royal-navy) 58%, oklch(0.28 0.04 256));
   --shadow-royal: 0 18px 40px -20px oklch(0.1 0.03 260 / 0.9), inset 0 0 0 1px oklch(0.767 0.139 91.1 / 0.55), inset 0 0 0 4px oklch(0.767 0.139 91.1 / 0.08);
   --shadow-gold-btn: 0 6px 18px -6px oklch(0.767 0.139 91.1 / 0.6), inset 0 1px 0 oklch(0.97 0.06 95 / 0.8);
 
@@ -239,7 +239,7 @@
 }
 @utility card-royal-wine {
   border-radius: 1rem;
-  background: linear-gradient(160deg, oklch(0.4 0.14 15), var(--royal-wine) 55%, var(--royal-wine-deep));
+  background: linear-gradient(160deg, oklch(0.52 0.09 13), var(--royal-wine) 55%, var(--royal-wine-deep));
   box-shadow: var(--shadow-royal);
 }
 @utility card-royal-navy {
@@ -281,7 +281,7 @@
 @utility preserve-3d { transform-style: preserve-3d; }
 @utility wish-card-3d {
   backface-visibility: hidden;
-  box-shadow: var(--shadow-royal), 0 30px 50px -24px oklch(0.08 0.03 350 / 0.9);
+  box-shadow: var(--shadow-royal), 0 30px 50px -24px oklch(0.15 0.03 245 / 0.6);
   &::after {
     content: "";
     position: absolute;
